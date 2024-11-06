@@ -1,0 +1,16 @@
+mqtt:
+  host: <DIRECCIÓN_IP_DEL_SERVIDOR_MQTT>
+  user: <USUARIO_MQTT>
+  password: <CONTRASEÑA_MQTT>
+
+cameras:
+  nombre_de_tu_camara:
+    ffmpeg:
+      inputs:
+        - path: rtsp://<USUARIO_RTSP>:<CONTRASEÑA>@<DIRECCIÓN_IP_DE_LA_CÁMARA>:<PUERTO>/ruta_del_stream
+          roles:
+            - detect
+    detect:
+      width: 1280
+      height: 720
+      fps: 5
