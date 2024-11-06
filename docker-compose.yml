@@ -1,16 +1,29 @@
 version: "3.9"
 services:
-  frigate:
-    container_name: frigate
-    image: ghcr.io/blakeblackshear/frigate:stable
+  mqtt:
+    image: eclipse-mosquitto
+    container_name: mqtt
     volumes:
-      - ./config:/config
-      - ./storage:/media/frigate
+      - ./mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    ports:
+      - "1883:1883"
+    restart: unless-stopped
+
+  frigate:
+    image: ghcr.io/blakeblackshear/frigate:stable
+    container_name: frigate
+    depends_on:
+      - mqtt
+    volumes:
+      - ./frigate/config.yml:/config/config.yml
+      - ./frigate/media:/media/frigate
       - type: tmpfs
         target: /tmp/cache
         tmpfs:
           size: 1000000000
     ports:
-      - "5000:5000"
+      - "5001:5000"
       - "1935:1935"
     restart: unless-stopped
